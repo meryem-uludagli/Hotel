@@ -11,9 +11,8 @@ const List: FC = () => {
   const [params] = useSearchParams();
   const paramsObj = Object.fromEntries(params.entries());
 
-  // api isteği
   const { isLoading, error, data, refetch } = useQuery<Place[]>({
-    queryKey: ["places", paramsObj], //  bağımlılık dizisi
+    queryKey: ["places", paramsObj],
     queryFn: () => getPlaces(paramsObj),
     retry: 3,
   });
