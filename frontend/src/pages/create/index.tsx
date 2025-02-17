@@ -1,7 +1,14 @@
 import { FC } from "react";
-
+import { Formik } from "formik";
 const Create: FC = () => {
-  return <div>Create</div>;
+  const initialValues = {};
+  const onSubmit = () => {};
+
+  return (
+    <div className="container">
+      <Formik initialValues={initialValues} onSubmit={onSubmit}></Formik>
+    </div>
+  );
 };
 
 export default Create;
