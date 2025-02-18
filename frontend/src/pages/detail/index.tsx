@@ -1,36 +1,50 @@
+import { useQuery } from "@tanstack/react-query";
 import { FC } from "react";
+import { useParams } from "react-router-dom";
+import { getPlace } from "../../utils/service";
+import Loader from "../../components/loader";
+import Error from "../../components/error";
+
+import Container from "./container";
+import Images from "./images";
+import Info from "./info";
+import Overview from "./overvıew";
+import Button from "./button";
 
 const Detail: FC = () => {
+  const { id } = useParams();
+
+  const { isLoading, error, data, refetch } = useQuery({
+    queryKey: ["place"],
+    queryFn: () => getPlace(id as string),
+  });
+
+  if (isLoading)
+    return (
+      <Container>
+        <Loader />
+      </Container>
+    );
+
+  if (error)
+    return (
+      <Container>
+        <Error info={error} refetch={refetch} />
+      </Container>
+    );
+
+  if (!data) return;
+
   return (
-    <form className="flex flex-col gap-4 lg:gap-10">
-      <div className="field">
-        <label>Nereye</label>
-        <select className="input">
-          <option value="">Seçiniz</option>
-        </select>
-      </div>
+    <Container>
+      <Images image={data.image_url} />
 
-      <div className="field">
-        <label>Konaklama Yeri Adına göre ara</label>
-        <input type="text" placeholder="Seaside Villa" className="input" />
-      </div>
+      <Info place={data} />
 
-      <div className="field">
-        <label>Nereye</label>
-        <select className="input">
-          <option value="">Seçiniz</option>
-        </select>
-      </div>
+      <Overview place={data} />
 
-      <div className="flex justify-end">
-        <button
-          type="reset"
-          className="bg-blue-500 p-1 px-4 text-white rounded-md w-fit"
-        >
-          Filtreleri Temizle
-        </button>
-      </div>
-    </form>
+      <Button id={id as string} />
+    </Container>
   );
 };
 
